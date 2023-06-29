@@ -1,8 +1,8 @@
-const mongoose=require('mongoose');
-const db=require('../config/db');
-const { Schema }= mongoose;
+const mongoose = require('mongoose');
+const db = require('../config/db');
+const { Schema } = mongoose;
 
-const userSchema=new Schema({
+const userSchema = new Schema({
     username: {
         type: String,
         unique: true,
@@ -19,6 +19,15 @@ const userSchema=new Schema({
     }
 });
 
-const userModel=db.model('users',userSchema);
+userSchema.methods.comparePassword = async function (userPassword) {
+    try {
+        const isMatch = this.password == userPassword;
+        return isMatch;
+    } catch (error) {
+        throw error;
+    }
+}
 
-module.exports=userModel;
+const userModel = db.model('users', userSchema);
+
+module.exports = userModel;
